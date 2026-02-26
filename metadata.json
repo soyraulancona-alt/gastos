@@ -1,0 +1,5 @@
+{
+  "name": "GastoRápido",
+  "description": "Una aplicación minimalista y veloz para el seguimiento de tus gastos personales.",
+  "requestFramePermissions": []
+}
