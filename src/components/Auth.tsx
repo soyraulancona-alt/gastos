@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Wallet, Mail, Lock, ArrowRight, Loader2 } from "lucide-react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 
 interface AuthProps {
   onLogin: (user: any) => void;
@@ -44,10 +44,13 @@ export default function Auth({ onLogin }: AuthProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#F8F9FA] flex items-center justify-center p-4" key="auth-container">
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
+        key={isLogin ? "login-card" : "register-card"}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.3 }}
         className="w-full max-w-md bg-white rounded-3xl shadow-xl shadow-black/5 border border-black/5 p-8"
       >
         <div className="flex flex-col items-center mb-8">
@@ -61,11 +64,21 @@ export default function Auth({ onLogin }: AuthProps) {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {error && (
-            <div className="p-3 bg-red-50 border border-red-100 text-red-600 text-sm rounded-xl text-center">
-              {error}
-            </div>
-          )}
+          <AnimatePresence mode="wait">
+            {error && (
+              <motion.div
+                key="auth-error"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                className="overflow-hidden"
+              >
+                <div className="p-3 bg-red-50 border border-red-100 text-red-600 text-sm rounded-xl text-center mb-2">
+                  {error}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-gray-700 ml-1">Email</label>
             <div className="relative">
